@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediNav AI — Personal Health Copilot</title>
+  <meta name="description" content="AI-Powered Personal Health Copilot: Analyze symptoms, discover matched specialist doctors, find clinic and hospital locations, and book appointments instantly." />
+  
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d9488' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>" />
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-light">
+
+  <!-- =========================================================================
+       AUTHENTICATION GATEWAY / LOGIN & SIGNUP PORTAL (MANDATORY TO OPEN APP)
+       ========================================================================= -->
+  <div id="authGatewayOverlay" class="auth-gateway-overlay">
+    <div class="auth-modal-card">
+      <!-- Auth Brand Header -->
+      <div class="auth-header">
+        <div class="auth-brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">MediNav <span class="brand-accent">AI</span></span>
+            <span class="brand-subtitle">Personal Health Copilot</span>
+          </div>
+        </div>
+        <div class="auth-security-pill">
+          <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Secure Patient Access Portal</span>
+        </div>
+      </div>
+
+      <!-- Auth Greeting -->
+      <div class="auth-intro">
+        <h2 id="authHeading">Welcome to MediNav AI</h2>
+        <p id="authSubheading">Sign in with any email, mobile number, or name to access AI symptom triage, verified clinic routing, and appointment scheduling.</p>
+      </div>
+
+      <!-- Auth Switch Tabs -->
+      <div class="auth-tabs" role="tablist">
+        <button type="button" class="auth-tab-btn active" id="authTabLoginBtn" data-target="login">
+          Sign In
+        </button>
+        <button type="button" class="auth-tab-btn" id="authTabSignupBtn" data-target="signup">
+          Register New Patient
+        </button>
+      </div>
+
+      <!-- Sign In Form (Universal Open Access) -->
+      <form id="loginForm" class="auth-form-view">
+        <div class="auth-hint-banner">
+          <span>✨</span>
+          <span><strong>Open Universal Access:</strong> Anyone can log in! Enter your name, email/mobile number, and any password to enter directly.</span>
+        </div>
+
+        <div class="auth-field">
+          <label for="loginNameInput">Full Name (Optional)</label>
+          <div class="auth-input-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="loginNameInput" placeholder="Enter your name (e.g. Suresh Kumar)" />
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="loginEmailInput">Email or Mobile Number</label>
+          <div class="auth-input-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="text" id="loginEmailInput" placeholder="Enter ANY email or phone (e.g. user@gmail.com or 9876543210)" required />
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="loginPasswordInput">Password</label>
+          <div class="auth-input-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="loginPasswordInput" placeholder="Enter any password (e.g. 123456)" required />
+            <button type="button" id="toggleLoginPasswordBtn" class="toggle-pw-btn" title="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-row-remember">
+          <label class="remember-label">
+            <input type="checkbox" id="rememberMeCheckbox" checked />
+            <span>Stay Logged In</span>
+          </label>
+          <span style="font-size: 0.78rem; color: var(--teal-700); font-weight: 700;">🔓 Universal Access Enabled</span>
+        </div>
+
+        <div id="authLoginError" class="auth-error-msg hidden"></div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">
+          <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span>Sign In & Open Health Copilot</span>
+        </button>
+
+        <!-- Quick 1-Click Demo Login -->
+        <div class="quick-demo-login-box">
+          <span class="quick-demo-divider">Or for 1-Click instant guest access:</span>
+          <button type="button" id="quickDemoLoginBtn" class="btn btn-outline btn-block">
+            ⚡ 1-Click Instant Guest Access
+          </button>
+        </div>
+      </form>
+
+      <!-- Sign Up Form (New Patient) -->
+      <form id="signupForm" class="auth-form-view hidden">
+        <div class="auth-field">
+          <label for="signupNameInput">Full Name</label>
+          <div class="auth-input-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="signupNameInput" placeholder="e.g. Ananya Patel" required />
+          </div>
+        </div>
+
+        <div class="auth-field-group">
+          <div class="auth-field">
+            <label for="signupPhoneInput">Mobile Number</label>
+            <div class="auth-input-wrap">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <input type="tel" id="signupPhoneInput" placeholder="9876543210" required />
+            </div>
+          </div>
+          <div class="auth-field">
+            <label for="signupAgeInput">Age & Gender</label>
+            <div class="auth-input-wrap">
+              <input type="text" id="signupAgeInput" placeholder="26 / Female" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="signupEmailInput">Email Address</label>
+          <div class="auth-input-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="signupEmailInput" placeholder="ananya@example.com" required />
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="signupPasswordInput">Password</label>
+          <div class="auth-input-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="signupPasswordInput" placeholder="Choose a secure password" required />
+          </div>
+        </div>
+
+        <div id="authSignupError" class="auth-error-msg hidden"></div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">
+          <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          <span>Create Account & Enter App</span>
+        </button>
+      </form>
+
+      <!-- Auth Footer Notice -->
+      <div class="auth-footer-notice">
+        <p>🔒 Privacy Protected: Your healthcare navigation data is stored safely on your device. For medical emergencies, dial <strong>112</strong> immediately.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       TOP GLOBAL EMERGENCY ALERT STRIP (INDIA: 112)
+       ========================================================================= -->
+  <div class="emergency-strip" role="region" aria-label="Emergency Notice">
+    <div class="container emergency-strip-inner">
+      <div class="strip-text">
+        <span class="strip-badge" data-i18n="badgeEmergency">EMERGENCY (INDIA)</span>
+        <span data-i18n="stripText">For acute medical emergencies, dial <strong>112</strong> immediately. Online triage is informational only.</span>
+      </div>
+      <a href="tel:112" class="strip-call-btn">
+        <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span data-i18n="call112">Call 112 Now</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       NAVIGATION BAR
+       ========================================================================= -->
+  <header class="navbar" id="navbar">
+    <div class="container navbar-inner">
+      <!-- Brand Logo -->
+      <a href="#home" class="brand" aria-label="MediNav AI Home">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">MediNav <span class="brand-accent">AI</span></span>
+          <span class="brand-subtitle" data-i18n="brandSubtitle">Personal Health Copilot</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="nav-link active" data-i18n="navHome">Home</a>
+        <a href="#copilot-section" class="nav-link" data-i18n="navTriage">Symptom Copilot</a>
+        <a href="#doctors-section" class="nav-link" data-i18n="navDoctors">Doctors & Clinics</a>
+        <a href="#hospitals-section" class="nav-link" data-i18n="navHospitals">Hospitals</a>
+        <a href="#my-appointments-section" class="nav-link appointment-nav-link" id="navMyAppointmentsLink">
+          <span data-i18n="navAppointments">My Appointments</span>
+          <span id="appointmentCountBadge" class="nav-count-badge hidden">0</span>
+        </a>
+        <a href="#care-journey-section" class="nav-link" data-i18n="navCareJourney">Care Planner</a>
+      </nav>
+
+      <!-- Action Area: Language Toggle & Mobile Hamburger -->
+      <div class="nav-actions">
+        <!-- Logged-in User Profile Badge & Logout -->
+        <div id="userProfileBadge" class="user-profile-badge hidden">
+          <div class="user-avatar-sm" id="navUserAvatar">RS</div>
+          <div class="user-details-mini">
+            <span class="user-name-sm" id="navUserName">Rahul S.</span>
+            <span class="user-role-tag">Patient</span>
+          </div>
+          <button type="button" id="logoutBtn" class="logout-btn" title="Sign Out">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Logout</span>
+          </button>
+        </div>
+
+        <!-- Language Switcher Button -->
+        <button id="langToggleBtn" class="lang-toggle-btn" title="Switch English / Telugu">
+          <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span id="langLabel">తెలుగు</span>
+        </button>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       HERO SECTION: PERSONAL HEALTH COPILOT
+       ========================================================================= -->
+  <section class="hero-section" id="home">
+    <div class="container hero-container">
+      <!-- Tagline Pill -->
+      <div class="hero-pill">
+        <span class="hero-pill-dot"></span>
+        <span data-i18n="heroPill">AI-Powered Personal Health Copilot & Clinic Navigator</span>
+      </div>
+
+      <!-- Main Headline & Tagline -->
+      <h1 class="hero-title">
+        MediNav <span class="brand-accent">AI</span>
+      </h1>
+      <p class="hero-tagline" data-i18n="heroTagline">
+        “Your Health, Your Doctor, Your Direction.”
+      </p>
+      <p class="hero-description" data-i18n="heroDescription">
+        Type your symptoms to instantly discover the right doctor specialist, locate nearby verified clinics and hospitals, get exact navigation routes, and book your consultation appointment in 30 seconds.
+      </p>
+
+      <!-- Symptom Search Box in Hero -->
+      <div class="search-card">
+        <form id="symptomSearchForm" class="search-form">
+          <div class="search-input-group">
+            <label for="symptomInput" class="search-label" data-i18n="searchLabel">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              What symptoms or medical concerns are you experiencing?
+            </label>
+            <div class="textarea-wrapper">
+              <textarea 
+                id="symptomInput" 
+                rows="3" 
+                placeholder="e.g. Severe tooth pain with swollen gums, high fever for 2 days with dry cough, or sharp chest pain and breathlessness..."
+                data-i18n-placeholder="symptomPlaceholder"
+                required
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Secondary Location Input -->
+          <div class="search-location-row">
+            <div class="location-input-box">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input type="text" id="localityInput" placeholder="Your City or Locality (e.g. Musheerabad, Hyderabad)" value="Hyderabad" />
+            </div>
+            <button type="button" id="useGpsBtn" class="btn btn-outline" title="Use Device Geolocation">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+              <span data-i18n="useGps">Use My GPS</span>
+            </button>
+          </div>
+
+          <!-- Quick Common Symptom Chips -->
+          <div class="quick-chips-wrapper">
+            <span class="chips-label" data-i18n="quickSuggestions">Quick examples:</span>
+            <div class="chips-list">
+              <button type="button" class="symptom-chip" data-symptom="Severe throbbing toothache, cavity and bleeding gums">🦷 Toothache & Bleeding Gums</button>
+              <button type="button" class="symptom-chip" data-symptom="High fever of 102F with shivering and severe body ache">🤒 High Fever & Body Ache</button>
+              <button type="button" class="symptom-chip" data-symptom="Severe migraine headache and nausea">🤕 Severe Migraine</button>
+              <button type="button" class="symptom-chip" data-symptom="Persistent dry cough and wheezing breath">🫁 Persistent Cough</button>
+              <button type="button" class="symptom-chip" data-symptom="Red itchy skin rash and hives">🩺 Skin Itching & Rash</button>
+              <button type="button" class="symptom-chip red-chip" data-symptom="Sudden severe chest pain, tightness and breathlessness">⚠️ Severe Chest Pain (Emergency Test)</button>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="search-actions">
+            <button type="submit" id="recommendBtn" class="btn btn-primary btn-large">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span data-i18n="btnFindDoctor">Analyze & Find Doctors</span>
+            </button>
+            <a href="#hospitals-section" class="btn btn-secondary btn-large">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span data-i18n="btnFindHospitals">View Nearby Hospitals</span>
+            </a>
+          </div>
+        </form>
+
+        <!-- Informational Notice -->
+        <div class="disclaimer-banner">
+          <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span data-i18n="heroDisclaimer">
+            <strong>Medical Disclaimer:</strong> MediNav AI provides informational guidance only and is not a clinical medical diagnosis. In critical situations, dial 112 immediately.
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       AI COPILOT ANALYSIS & SPECIALTY RESULTS
+       ========================================================================= -->
+  <section class="section triage-section" id="copilot-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="tagTriage">Personal Health Copilot</span>
+        <h2 class="section-title" data-i18n="triageTitle">AI Health Copilot Evaluation</h2>
+        <p class="section-subtitle" data-i18n="triageSubtitle">
+          Intelligent triage analysis converting your symptoms into clinical insights and matched specialists.
+        </p>
+      </div>
+
+      <!-- Loading State -->
+      <div id="triageLoading" class="loading-state hidden">
+        <div class="spinner"></div>
+        <p data-i18n="analyzingSymptoms">Analyzing symptom patterns against clinical guidelines...</p>
+      </div>
+
+      <!-- Emergency Red Flag Alert Box (Shown dynamically when danger keywords detected) -->
+      <div id="criticalEmergencyAlert" class="emergency-alert-card hidden">
+        <div class="emergency-alert-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="emergency-alert-content">
+          <h3 id="emergencyAlertTitle" data-i18n="emergencyAlertTitle">CRITICAL SAFETY WARNING: POTENTIAL EMERGENCY</h3>
+          <p id="emergencyAlertText" data-i18n="emergencyAlertText">
+            The symptoms entered indicate a potentially serious or life-threatening condition. Do NOT wait for an online appointment or travel without medical supervision.
+          </p>
+          <div class="emergency-actions">
+            <a href="tel:112" class="btn btn-emergency">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span data-i18n="callEmergency112">Dial 112 (Emergency Police & Medical)</span>
+            </a>
+            <a href="tel:108" class="btn btn-outline-light">
+              <span data-i18n="callAmbulance108">Dial 108 (Free Emergency Ambulance)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendation Result Card -->
+      <div id="triageResultCard" class="triage-result-card hidden">
+        <div class="recommendation-header">
+          <div class="recommendation-badge">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span data-i18n="recommendedSpecialtyBadge">RECOMMENDED SPECIALTY</span>
+          </div>
+          <div class="urgency-pill" id="urgencyLevelBadge">Informational Consultation</div>
+        </div>
+
+        <div class="recommendation-body">
+          <div class="specialty-highlight">
+            <h3 id="recommendedSpecialtyName" class="specialty-title">General Physician</h3>
+            <p id="recommendedSpecialtyTelugu" class="specialty-telugu">సాధారణ వైద్యుడు (జనరల్ ఫిజీషియన్)</p>
+          </div>
+
+          <div class="reason-box">
+            <h4 data-i18n="whyThisSpecialty">Why this clinical specialty:</h4>
+            <p id="recommendationReason">
+              Symptoms warrant comprehensive general medicine baseline assessment and clinical triage.
+            </p>
+          </div>
+
+          <!-- Copilot Clinical Summary Card (To show to doctor) -->
+          <div class="copilot-summary-card">
+            <div class="copilot-summary-header">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <strong data-i18n="copilotSummaryTitle">Copilot Clinical Note (Show to Doctor):</strong>
+            </div>
+            <p id="copilotPatientSummary" class="copilot-summary-text">
+              Patient presenting symptoms recorded for initial triage.
+            </p>
+          </div>
+
+          <div class="guidance-notice">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <p data-i18n="triageDisclaimerNotice">
+              MediNav AI does not prescribe medicines or diagnose diseases. This guidance is informational to help you navigate to the right medical specialist.
+            </p>
+          </div>
+
+          <!-- Quick Next Steps Actions -->
+          <div class="recommendation-footer">
+            <a href="#doctors-section" id="viewMatchedDocsBtn" class="btn btn-primary">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span data-i18n="btnBookSpecialistDoc">View Matched Doctors</span>
+            </a>
+            <button type="button" id="viewAllDocsTriageBtn" class="btn btn-outline">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+              <span>View All Doctors (<span id="triageAllDocsCount">15</span>)</span>
+            </button>
+            <a href="#hospitals-section" id="filterHospitalsBtn" class="btn btn-secondary">
+              <span data-i18n="btnViewHospitalsWithSpecialty">View Hospitals Offering This Specialty</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       DOCTORS & CLINIC LOCATIONS SECTION (WITH DIRECT APPOINTMENT BOOKING)
+       ========================================================================= -->
+  <section class="section doctors-section" id="doctors-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="tagDoctors">Verified Physicians & Clinics</span>
+        <h2 class="section-title" data-i18n="doctorsTitle">Matched Doctors & Clinic Locations</h2>
+        <p class="section-subtitle" data-i18n="doctorsSubtitle">
+          Discover verified doctors at nearby clinics and hospitals, view ratings, consultation fees, exact OPD room locations, and book your appointment directly.
+        </p>
+      </div>
+
+      <!-- Doctors Filter & Toolbar -->
+      <div class="doctors-toolbar">
+        <div class="doc-toolbar-top">
+          <!-- Total Doctor Count Badge -->
+          <div class="doc-count-badge-wrap">
+            <span class="pulse-indicator"></span>
+            <span id="totalDoctorsBadge">Showing <strong>15 Verified Doctors</strong></span>
+          </div>
+
+          <!-- Quick Filter Tabs (All / Best Rated / Affordable) -->
+          <div class="doc-tabs-group" role="tablist">
+            <button type="button" class="doc-tab-btn active" data-filter="all">All Doctors (15)</button>
+            <button type="button" class="doc-tab-btn star-tab" data-filter="best">⭐ Best Rated (4.8+)</button>
+            <button type="button" class="doc-tab-btn" data-filter="lowcost">Subsidized / Govt</button>
+          </div>
+        </div>
+
+        <div class="doc-toolbar-bottom">
+          <!-- Search Doctor -->
+          <div class="doc-search-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="docSearchInput" placeholder="Search doctor by name, specialty, or hospital..." />
+            <button type="button" id="clearDocSearchBtn" class="clear-search-btn hidden" title="Clear search">&times;</button>
+          </div>
+
+          <!-- Sort Select -->
+          <div class="doc-sort-wrap">
+            <label for="docSortSelect">Sort by:</label>
+            <select id="docSortSelect" class="doc-sort-dropdown">
+              <option value="best">⭐ Best Doctor (Rating: High to Low)</option>
+              <option value="reviews">💬 Most Reviewed & Trusted</option>
+              <option value="exp">🩺 Most Experienced (Years)</option>
+              <option value="feeAsc">💰 Consultation Fee: Low to High</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter Active Banner (Shown when specialty filter is active) -->
+        <div id="docSpecialtyActiveBanner" class="filter-active-banner hidden">
+          <div class="banner-text">
+            <span>Filtering by specialty: <strong id="activeSpecialtyNameText">Cardiology</strong></span>
+            <span id="activeSpecialtyDocCountText" class="badge-pill">2 Doctors</span>
+          </div>
+          <button type="button" id="clearSpecialtyFilterBtn" class="btn btn-outline btn-sm">
+            Show All 15 Doctors
+          </button>
+        </div>
+      </div>
+
+      <!-- Doctors Grid -->
+      <div id="doctorsGrid" class="doctors-grid">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       HOSPITALS & CLINICAL FACILITIES SECTION (WITH TRUSTCHECK VERIFICATION)
+       ========================================================================= -->
+  <section class="section hospitals-section" id="hospitals-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="tagHospitals">Healthcare Facilities</span>
+        <h2 class="section-title" data-i18n="hospitalsTitle">Hospitals & Medical Centers</h2>
+        <p class="section-subtitle" data-i18n="hospitalsSubtitle">
+          Find accredited government tertiary institutes, affordable charitable trusts, and private multi-specialty hospitals.
+        </p>
+      </div>
+
+      <!-- Filters Bar -->
+      <div class="filters-card">
+        <div class="filter-search-row">
+          <div class="filter-input-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="hospSearchInput" placeholder="Search by hospital name, specialty, or locality..." data-i18n-placeholder="hospSearchPlaceholder" />
+          </div>
+          <div class="filter-input-wrap locality-wrap">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <input type="text" id="hospCityInput" placeholder="City (e.g. Hyderabad)" value="Hyderabad" />
+          </div>
+          <button id="applyHospFilterBtn" class="btn btn-primary" data-i18n="btnFilter">Filter</button>
+        </div>
+
+        <div class="filter-tabs-row">
+          <div class="type-filter-group">
+            <span class="filter-group-label" data-i18n="facilityType">Facility Type:</span>
+            <div class="btn-group">
+              <button class="filter-tab active" data-type="All" data-i18n="tabAll">All</button>
+              <button class="filter-tab" data-type="Government" data-i18n="tabGovt">Government</button>
+              <button class="filter-tab" data-type="Private" data-i18n="tabPrivate">Private</button>
+              <button class="filter-tab" data-type="Charitable/Trust" data-i18n="tabCharitable">Charitable/Trust</button>
+            </div>
+          </div>
+
+          <div class="toggles-group">
+            <label class="toggle-control">
+              <input type="checkbox" id="lowCostOnlyToggle" />
+              <span class="toggle-track"></span>
+              <span class="toggle-label" data-i18n="toggleLowCost">Free / Low-Cost Only</span>
+            </label>
+            <label class="toggle-control">
+              <input type="checkbox" id="verifiedOnlyToggle" checked />
+              <span class="toggle-track"></span>
+              <span class="toggle-label" data-i18n="toggleVerifiedOnly">Verified Facilities Only</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transparency Notice -->
+      <div class="data-notice-strip">
+        <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span data-i18n="sampleDataDisclaimer">
+          <strong>Notice:</strong> All hospital details are embedded directly with zero external extension requirements. Always confirm OPD duty rosters by telephone before traveling.
+        </span>
+      </div>
+
+      <!-- Hospitals Grid -->
+      <div id="hospitalsGrid" class="hospitals-grid">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="hospitalsEmptyState" class="empty-state hidden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <h4 data-i18n="noHospitalsFound">No matching medical facilities found</h4>
+        <p data-i18n="tryAdjustingFilters">Try adjusting your search criteria, clear filters, or select a broader locality.</p>
+        <button id="resetHospFiltersBtn" class="btn btn-outline" data-i18n="resetFilters">Reset Filters</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       MY BOOKED APPOINTMENTS SECTION ("nenu opointement thiskunte ekkada kanipinchali")
+       ========================================================================= -->
+  <section class="section appointments-section" id="my-appointments-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="tagAppointments">Patient Care Portal</span>
+        <h2 class="section-title" data-i18n="myAppointmentsTitle">My Booked Appointments</h2>
+        <p class="section-subtitle" data-i18n="myAppointmentsSubtitle">
+          Access your digital OPD consultation slips, token passes, doctor timings, and clinic navigation cards.
+        </p>
+      </div>
+
+      <div id="appointmentsContainer" class="appointments-list">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CARE JOURNEY PLANNER & SMART BACKUP SECTION
+       ========================================================================= -->
+  <section class="section care-journey-section" id="care-journey-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="tagCareJourney">Patient Care Navigator</span>
+        <h2 class="section-title" data-i18n="careJourneyTitle">Care Journey Planner & Family Share</h2>
+        <p class="section-subtitle" data-i18n="careJourneySubtitle">
+          Organize your hospital visit step-by-step, verify documents, and share your complete journey plan with family members.
+        </p>
+      </div>
+
+      <div class="planner-layout">
+        <!-- Interactive Plan Builder -->
+        <div class="planner-card">
+          <div class="planner-header">
+            <h3 data-i18n="planVisitHeading">Hospital Visit Action Plan</h3>
+            <span class="active-badge" data-i18n="stepByStep">Step-by-Step</span>
+          </div>
+
+          <div class="plan-form">
+            <div class="form-row">
+              <label for="planSpecialtyInput" data-i18n="labelTargetSpecialty">Medical Specialty Needed:</label>
+              <input type="text" id="planSpecialtyInput" value="General Physician" />
+            </div>
+
+            <div class="form-row">
+              <label for="planHospitalSelect" data-i18n="labelChosenHospital">Selected Hospital / Clinic:</label>
+              <select id="planHospitalSelect">
+                <!-- Dynamically populated from hospitals data -->
+              </select>
+            </div>
+
+            <!-- Best Doctor Spotlight for this Visit Plan -->
+            <div id="carePlanBestDocCard" class="care-plan-best-doc-card">
+              <div class="care-plan-doc-badge">
+                <span class="badge-title">⭐ TOP RECOMMENDED DOCTOR FOR THIS VISIT</span>
+                <span id="carePlanDocCountPill" class="care-plan-doc-count-pill">Available Doctors: 2</span>
+              </div>
+              <div class="care-plan-doc-body" id="carePlanDocContent">
+                <!-- Dynamically populated via app.js -->
+              </div>
+            </div>
+
+            <!-- Call-Before-Visiting Reminder -->
+            <div class="call-reminder-box">
+              <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <div>
+                <strong data-i18n="callReminderTitle">Call-Before-Visiting Reminder:</strong>
+                <p data-i18n="callReminderDesc">Always dial the reception desk beforehand to verify OPD token timings and whether the doctor is on duty today.</p>
+              </div>
+            </div>
+
+            <!-- Questions to ask the hospital -->
+            <div class="planner-section-sub">
+              <h4 data-i18n="questionsToAskHeading">Questions to Ask the Hospital:</h4>
+              <ul class="questions-list">
+                <li data-i18n="q1">“Is the required specialist on duty for outpatient consultations today?”</li>
+                <li data-i18n="q2">“Do you accept government health cards (Aarogyasri / Ayushman Bharat) at the registration counter?”</li>
+                <li data-i18n="q3">“What are the OPD registration hours and expected queue wait times?”</li>
+                <li data-i18n="q4">“What basic diagnostic reports (blood tests, X-rays) should I carry?”</li>
+              </ul>
+            </div>
+
+            <!-- Document Checklist -->
+            <div class="planner-section-sub">
+              <h4 data-i18n="checklistHeading">Checklist of Documents to Carry:</h4>
+              <div class="checklist-items" id="documentChecklist">
+                <label class="check-item">
+                  <input type="checkbox" checked />
+                  <span data-i18n="docId">Government Photo ID (Aadhaar Card, Voter ID, or Driving License)</span>
+                </label>
+                <label class="check-item">
+                  <input type="checkbox" checked />
+                  <span data-i18n="docInsurance">Aarogyasri / Ayushman Bharat Card or Health Insurance Policy Copy</span>
+                </label>
+                <label class="check-item">
+                  <input type="checkbox" checked />
+                  <span data-i18n="docReports">Previous Medical Prescriptions, Lab Reports & Discharge Summaries</span>
+                </label>
+                <label class="check-item">
+                  <input type="checkbox" checked />
+                  <span data-i18n="docMeds">List of current daily medications and known drug allergies</span>
+                </label>
+                <label class="check-item">
+                  <input type="checkbox" />
+                  <span data-i18n="docCash">Emergency cash / UPI for nominal OPD registration fees</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Save & Share Buttons -->
+            <div class="planner-actions">
+              <button id="saveCarePlanBtn" class="btn btn-primary">
+                <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span data-i18n="btnSavePlan">Save Care Plan</span>
+              </button>
+              <button id="openShareModalBtn" class="btn btn-secondary">
+                <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <span data-i18n="btnFamilyCareShare">Family Care Share</span>
+              </button>
+            </div>
+            <div id="planSaveStatus" class="save-status-msg hidden"></div>
+          </div>
+        </div>
+
+        <!-- Smart Backup Hospital Card -->
+        <div class="backup-card" id="backupHospitalCard">
+          <div class="backup-header">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <div>
+              <h4 data-i18n="smartBackupTitle">Smart Backup Hospital</h4>
+              <p data-i18n="smartBackupDesc">Contingency options in case your primary choice has long queues or limited bed capacity.</p>
+            </div>
+          </div>
+
+          <div id="backupHospitalsList" class="backup-list">
+            <!-- Populated dynamically via app.js -->
+            <p class="text-muted" data-i18n="selectPrimaryForBackups">Select a hospital above to view smart backup facilities offering the same specialty.</p>
+          </div>
+
+          <div class="backup-disclaimer">
+            <small data-i18n="backupNotice">⚠️ Notice: Hospital bed and specialist availability must always be confirmed directly by telephone before travel.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       EMERGENCY & HELPLINE DIRECTORY SECTION (INDIA)
+       ========================================================================= -->
+  <section class="section emergency-section" id="emergency-section">
+    <div class="container">
+      <div class="emergency-banner">
+        <div class="emergency-banner-header">
+          <div class="em-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div>
+            <h2 data-i18n="emergencyDirectoryTitle">National Emergency Helplines (India)</h2>
+            <p data-i18n="emergencyDirectorySubtitle">Keep these numbers saved on your phone for rapid response during medical or traumatic crises.</p>
+          </div>
+        </div>
+
+        <div class="helpline-grid">
+          <div class="helpline-card highlight-card">
+            <div class="helpline-number">112</div>
+            <h4 data-i18n="em112Title">Unified National Emergency Helpline</h4>
+            <p data-i18n="em112Desc">Immediate dispatch for Police, Fire, and Emergency Medical Ambulance services across all states in India.</p>
+            <a href="tel:112" class="btn btn-emergency-call" data-i18n="btnCall112">Call 112</a>
+          </div>
+
+          <div class="helpline-card">
+            <div class="helpline-number">108</div>
+            <h4 data-i18n="em108Title">Emergency Medical Ambulance (108)</h4>
+            <p data-i18n="em108Desc">Free government emergency ambulance and paramedic service for critical transport to nearest trauma hospital.</p>
+            <a href="tel:108" class="btn btn-outline" data-i18n="btnCall108">Call 108</a>
+          </div>
+
+          <div class="helpline-card">
+            <div class="helpline-number">102</div>
+            <h4 data-i18n="em102Title">Maternal & Child Health Ambulance</h4>
+            <p data-i18n="em102Desc">Free transport for pregnant mothers and neonates under Janani Shishu Suraksha Karyakram (JSSK).</p>
+            <a href="tel:102" class="btn btn-outline" data-i18n="btnCall102">Call 102</a>
+          </div>
+
+          <div class="helpline-card">
+            <div class="helpline-number">14416 / 1800-891-4416</div>
+            <h4 data-i18n="emTeleManasTitle">Tele-MANAS Mental Health Support</h4>
+            <p data-i18n="emTeleManasDesc">Government of India 24/7 free, confidential mental health and psychological distress helpline in regional languages.</p>
+            <a href="tel:14416" class="btn btn-outline" data-i18n="btnCallTeleManas">Call Tele-MANAS</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <span class="brand-name">MediNav <span class="brand-accent">AI</span></span>
+        </div>
+        <p class="footer-tagline" data-i18n="footerTagline">“Your Health, Your Doctor, Your Direction.”</p>
+        <p class="footer-desc" data-i18n="footerDesc">
+          AI-Powered Personal Health Copilot built for the hackathon to empower patients with transparent triage, verified clinic routing, and instant appointment booking.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <h4 data-i18n="quickLinks">Quick Links</h4>
+        <ul>
+          <li><a href="#home" data-i18n="navHome">Home</a></li>
+          <li><a href="#copilot-section" data-i18n="navTriage">Symptom Copilot</a></li>
+          <li><a href="#doctors-section" data-i18n="navDoctors">Doctors & Clinics</a></li>
+          <li><a href="#hospitals-section" data-i18n="navHospitals">Hospitals</a></li>
+          <li><a href="#my-appointments-section" data-i18n="navAppointments">My Appointments</a></li>
+          <li><a href="#care-journey-section" data-i18n="navCareJourney">Care Planner</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-disclaimer">
+        <h4 data-i18n="legalNoticeHeading">Legal & Clinical Notice</h4>
+        <p data-i18n="footerLegalText">
+          MediNav AI is an educational healthcare navigation aid. It does not replace clinical consultation, prescription, diagnosis, or emergency dispatch. For life-threatening symptoms, dial 112 immediately.
+        </p>
+        <p class="copyright">© 2026 MediNav AI. Developed for College Hackathon.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       MODAL: HOSPITAL DETAILS & TRUSTCHECK
+       ========================================================================= -->
+  <div id="hospitalDetailsModal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalHospName">Hospital Name</h3>
+          <span id="modalHospTypeBadge" class="type-badge govt">Government</span>
+        </div>
+        <button id="closeHospModalBtn" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="modalHospBody" class="modal-body">
+        <!-- Dynamically rendered -->
+      </div>
+      <div class="modal-footer">
+        <button id="modalPlanVisitBtn" class="btn btn-primary">Plan Visit to this Hospital</button>
+        <a id="modalDirectionsLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+          Get Google Maps Directions
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: FAMILY CARE SHARE
+       ========================================================================= -->
+  <div id="familyShareModal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <h3 data-i18n="familyShareHeading">Family Care Share Summary</h3>
+          <span class="modal-badge-green" data-i18n="privacySafe">Privacy-Safe</span>
+        </div>
+        <button id="closeShareModalBtn" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-sm text-muted" data-i18n="familyShareNotice">
+          This summary contains only your target specialty, chosen hospital, checklist, and directions. No personal health records are stored or exposed.
+        </p>
+        <div class="share-preview-box">
+          <textarea id="shareSummaryText" rows="12" readonly></textarea>
+        </div>
+        <div class="share-actions-row">
+          <button id="copyShareBtn" class="btn btn-primary">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-i18n="btnCopyClipboard">Copy to Clipboard</span>
+          </button>
+          <a id="whatsappShareBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <span data-i18n="btnShareWhatsApp">Share on WhatsApp</span>
+          </a>
+        </div>
+        <div id="copyToast" class="toast-notice hidden" data-i18n="copiedToClipboard">Care summary copied to clipboard!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: APPOINTMENT BOOKING DIALOG ("opointement thiskonela")
+       ========================================================================= -->
+  <div id="appointmentBookingModal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <h3 data-i18n="modalBookingTitle">Book Doctor Appointment</h3>
+          <span class="modal-badge-green" data-i18n="badgeInstantToken">Instant Token</span>
+        </div>
+        <button id="closeBookingModalBtn" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Target Doctor & Clinic Overview -->
+        <div class="booking-doctor-banner">
+          <div class="doc-avatar-circle" id="bookDocAvatar">DR</div>
+          <div>
+            <h4 id="bookDocName" class="font-bold">Dr. Name</h4>
+            <p id="bookDocSpecialty" class="text-xs text-teal">Specialty</p>
+            <p id="bookClinicLocation" class="text-xs text-muted">📍 Clinic / Hospital Location</p>
+          </div>
+          <div class="booking-fee-badge" id="bookConsultationFee">₹20 Govt OPD</div>
+        </div>
+
+        <!-- Booking Form -->
+        <form id="appointmentBookingForm" class="booking-form-grid">
+          <div class="form-row">
+            <label for="bookPatientName" data-i18n="labelPatientName">Patient Full Name:</label>
+            <input type="text" id="bookPatientName" placeholder="e.g. Rahul Sharma" required />
+          </div>
+
+          <div class="form-row-group">
+            <div class="form-row">
+              <label for="bookPatientPhone" data-i18n="labelPatientPhone">Mobile Number:</label>
+              <input type="tel" id="bookPatientPhone" placeholder="e.g. 9876543210" required />
+            </div>
+            <div class="form-row">
+              <label for="bookPatientAge" data-i18n="labelPatientAge">Age & Gender:</label>
+              <input type="text" id="bookPatientAge" placeholder="e.g. 28 / Male" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="bookDateInput" data-i18n="labelSelectDate">Preferred Appointment Date:</label>
+            <input type="date" id="bookDateInput" required />
+          </div>
+
+          <div class="form-row">
+            <label data-i18n="labelSelectSlot">Available Consultation Time Slot:</label>
+            <div class="slot-chips-grid" id="slotChipsContainer">
+              <button type="button" class="slot-chip active" data-slot="10:00 AM - 10:30 AM">10:00 AM</button>
+              <button type="button" class="slot-chip" data-slot="11:30 AM - 12:00 PM">11:30 AM</button>
+              <button type="button" class="slot-chip" data-slot="2:00 PM - 2:30 PM">2:00 PM</button>
+              <button type="button" class="slot-chip" data-slot="4:30 PM - 5:00 PM">4:30 PM</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="bookSchemeSelect" data-i18n="labelGovtScheme">Healthcare Scheme (If Applicable):</label>
+            <select id="bookSchemeSelect">
+              <option value="General OPD / Self-Pay">General Consultation / Direct Pay</option>
+              <option value="Aarogyasri Health Scheme (Telangana/AP)">Aarogyasri Health Card (Govt Scheme)</option>
+              <option value="Ayushman Bharat / PM-JAY">Ayushman Bharat (PM-JAY Gold Card)</option>
+              <option value="Senior Citizen Subsidized OPD">Senior Citizen Concession</option>
+              <option value="Private Health Insurance (TPA)">Private Health Insurance</option>
+            </select>
+          </div>
+
+          <div class="booking-notice-card">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-i18n="bookingTokenNotice">Your digital consultation token will be generated immediately. Present this token at the clinic reception counter.</span>
+          </div>
+
+          <div class="modal-form-actions">
+            <button type="button" id="cancelBookingBtn" class="btn btn-outline" data-i18n="btnCancel">Cancel</button>
+            <button type="submit" id="confirmBookingBtn" class="btn btn-primary" data-i18n="btnConfirmAppointment">
+              Confirm & Generate Token
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: CONFIRMED OPD CONSULTATION PASS / DIGITAL TOKEN PASS
+       ========================================================================= -->
+  <div id="appointmentSuccessModal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-container pass-modal-container">
+      <div class="modal-header pass-header">
+        <div class="modal-title-wrap">
+          <h3 data-i18n="appointmentConfirmedTitle">✓ Appointment Confirmed!</h3>
+          <span class="active-badge" data-i18n="badgeActivePass">Active Token</span>
+        </div>
+        <button id="closeSuccessModalBtn" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body pass-body">
+        <!-- Physical Style Consultation Pass Ticket -->
+        <div class="ticket-card">
+          <div class="ticket-top">
+            <div class="ticket-brand">
+              <span class="brand-text">MediNav AI</span>
+              <span class="ticket-category" data-i18n="ticketOpdPass">OPD CONSULTATION PASS</span>
+            </div>
+            <div class="token-display">
+              <span class="token-label" data-i18n="tokenLabel">TOKEN NUMBER</span>
+              <span class="token-code" id="passTokenCode">#MED-248</span>
+            </div>
+          </div>
+
+          <div class="ticket-body">
+            <div class="ticket-row">
+              <div class="ticket-field">
+                <span class="ticket-field-label" data-i18n="fieldDoctor">DOCTOR</span>
+                <strong id="passDoctorName">Dr. Sneha Varma</strong>
+                <span id="passSpecialty" class="text-xs text-teal">Dentist</span>
+              </div>
+              <div class="ticket-field text-right">
+                <span class="ticket-field-label" data-i18n="fieldRoom">OPD ROOM / WING</span>
+                <strong id="passOpdRoom">Room #102</strong>
+              </div>
+            </div>
+
+            <div class="ticket-field" style="margin-top: 0.75rem;">
+              <span class="ticket-field-label" data-i18n="fieldClinicLocation">CLINIC / HOSPITAL LOCATION</span>
+              <strong id="passHospitalName">St. Theresa Dental Clinic</strong>
+              <p id="passHospitalAddress" class="text-xs text-muted">Sanath Nagar, Hyderabad</p>
+            </div>
+
+            <div class="ticket-row ticket-meta-strip" style="margin-top: 0.75rem;">
+              <div class="ticket-field">
+                <span class="ticket-field-label" data-i18n="fieldPatient">PATIENT</span>
+                <strong id="passPatientName">Rahul Sharma</strong>
+              </div>
+              <div class="ticket-field text-right">
+                <span class="ticket-field-label" data-i18n="fieldDate">DATE & TIME</span>
+                <strong id="passDateTime">Tomorrow • 10:00 AM</strong>
+              </div>
+            </div>
+
+            <div class="ticket-row" style="margin-top: 0.75rem; align-items: center;">
+              <div class="ticket-field">
+                <span class="ticket-field-label" data-i18n="fieldFee">REGISTRATION FEE</span>
+                <strong id="passFee" style="color: var(--teal-700)">₹150 (Subsidized)</strong>
+              </div>
+              <div class="text-right">
+                <a id="passDirectionsBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                  📍 Directions
+                </a>
+              </div>
+            </div>
+
+            <div class="ticket-footer-reminders">
+              <p data-i18n="ticketReminder">📋 Carry Aadhaar Card & prior prescriptions. Report 15 minutes before slot.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pass Action Buttons -->
+        <div class="pass-actions-grid">
+          <button id="copyPassTokenBtn" class="btn btn-primary" data-i18n="btnCopyToken">Copy Token Details</button>
+          <a id="sharePassWhatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" data-i18n="btnShareWhatsApp">Share on WhatsApp</a>
+        </div>
+        <div id="passCopyToast" class="toast-notice hidden" data-i18n="tokenCopied">Appointment details copied to clipboard!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Standalone Engine -->
+  <script src="app.js"></script>
+</body>
+</html>
